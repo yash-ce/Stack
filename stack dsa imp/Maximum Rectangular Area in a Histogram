@@ -1,0 +1,82 @@
+class Solution{
+{
+    public:
+    //Function to find largest rectangular area possible in a given histogram.
+    long long getMaxArea(long long arr[], int n)
+    {
+        // Your code here
+        // Your code here
+       //modification of NSL
+       
+       vector<long long>left;
+       stack<pair<long long, long long>>s;
+       int pseudoindex = -1;
+       long long i;
+     
+       for( i=0; i<n; i++)
+       {
+           if(s.size()==0)             //if stack is empty
+               left.push_back(pseudoindex);
+           else if( s.size()>0 && s.top().first<arr[i])
+               left.push_back(s.top().second);
+           else if(s.size()>0 && s.top().first>=arr[i])
+           {
+               while(s.size()>0 && s.top().first>=arr[i])
+                   s.pop();
+               
+               if(s.size()==0)
+                   left.push_back(pseudoindex);
+               else
+                   left.push_back(s.top().second);
+           }
+           s.push({arr[i],i});
+       }
+       
+       while(!s.empty())
+           s.pop();
+           
+       //NSR
+       
+       vector<long long>right;
+        pseudoindex = n;
+       
+       for( i=n-1; i>=0; i--)
+       {
+           if(s.size()==0)             //if stack is empty
+               right.push_back(pseudoindex);
+           else if( s.size()>0 && s.top().first<arr[i])
+               right.push_back(s.top().second);
+           else if(s.size()>0 && s.top().first>=arr[i])
+           {
+               while(s.size()>0 && s.top().first>=arr[i])
+                   s.pop();
+               
+               if(s.size()==0)
+                   right.push_back(pseudoindex);
+               else
+                   right.push_back(s.top().second);
+           }
+           s.push({arr[i],i});
+       }
+       reverse(right.begin(),right.end());
+       
+       
+       //obtaining area by calculating width
+       
+       // dont use extra vectors to calculate width, memory overflows  
+        for( i=0; i<n; i++)
+           right[i] = right[i]-left[i]-1;
+        
+       for( i=0; i<n; i++)
+          right[i] = arr[i]*right[i];
+       
+       long long max=right[0];
+       for( i=0; i<n; i++)
+       {
+           if(right[i] > max)
+               max = right[i];
+       }
+       
+       return max;
+    }
+};
