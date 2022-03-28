@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int minOperations(vector<string>& logs) {
+        stack<string> s;
+        for(string i : logs){
+            if(i == "../"){
+                if(!s.empty())
+                    s.pop();
+            }
+            else if(i == "./"){
+                continue;
+            }
+            else{
+                s.push(i);
+            }
+        }
+        // cout<<s.top()<<endl;
+        return s.size();
+        
+    }
+};
